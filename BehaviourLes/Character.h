@@ -22,13 +22,22 @@ public:
 	);
 	~Character();
 	void SetTarget(Character* aTarget);
+	Character* GetTarget();
+
+	AvailableBehaviours GetBehaviour();
 	void Setbehaviour(AvailableBehaviours aBehaviour);
-	int Update();
+	int Update(int min, int max);
+
+	void SetPosition(int aPos);
 	int GetPosition();
+
+	void SetIcon(std::string* newIcon);
 	std::string GetIcon();
 private:
 	Behaviour* currentBehaviour;
 	Character* target;
+	AvailableBehaviours* startBehaviour;
+
 	int position;
 	std::string icon;
 };
