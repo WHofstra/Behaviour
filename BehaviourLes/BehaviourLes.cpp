@@ -23,7 +23,6 @@ std::vector<Character*>* PlaceCharacters(std::vector<std::string>* field, std::v
 {
 	character->SetPosition(rand() % (field->size()));
 	character->SetIcon(&(iconList->at(rand() % 2)));
-	character->SetTarget(aTarget);
 	vector->push_back(character);
 	vector->at(0)->SetTarget(vector->at(1));
 	return vector;
