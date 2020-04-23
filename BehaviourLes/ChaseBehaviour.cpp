@@ -9,14 +9,13 @@ ChaseBehaviour::~ChaseBehaviour()
 {
 }
 
-int ChaseBehaviour::Update(int ownPosition, int targetPosition, int minPosition, int maxPosition)
+Vector ChaseBehaviour::Update(Vector* ownPosition, Vector* targetPosition, Vector* minPosition, Vector* maxPosition)
 {
-
-	if (ownPosition < targetPosition && ownPosition < maxPosition) {
-		return ownPosition+1;
+	if (ownPosition->X() < targetPosition->X() && ownPosition->X() < maxPosition->X()) {
+		ownPosition->SetVector(ownPosition->X() + 1, ownPosition->Y());
 	}
-	else if (ownPosition > targetPosition && ownPosition > minPosition) {
-		return ownPosition-1;
+	else if (ownPosition->X() > targetPosition->X() && ownPosition->X() > minPosition->X()) {
+		ownPosition->SetVector(ownPosition->X() - 1, ownPosition->Y());
 	}
-	return ownPosition;
+	return *ownPosition;
 }

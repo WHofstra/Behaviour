@@ -2,9 +2,11 @@
 #include <string>
 #include <cmath>
 #include <typeinfo>
+
 #include "Behaviour.h"
 #include "ChaseBehaviour.h"
 #include "EvadeBehaviour.h"
+#include "Vector.h"
 
 class Character
 {
@@ -16,7 +18,7 @@ public:
 	};
 public:
 	Character(AvailableBehaviours aStartBehaviour, 
-		int aStartPosition = 0, 
+		Vector aStartPosition = Vector(0, 0), 
 		std::string anIcon = "x",
 		Character* aTarget = nullptr
 	);
@@ -26,10 +28,10 @@ public:
 
 	AvailableBehaviours GetBehaviour();
 	void Setbehaviour(AvailableBehaviours aBehaviour);
-	int Update(int min, int max);
+	Vector Update(Vector* min, Vector* max);
 
-	void SetPosition(int aPos);
-	int GetPosition();
+	void SetPosition(Vector aPos);
+	Vector GetPosition();
 
 	void SetIcon(std::string* newIcon);
 	std::string GetIcon();
@@ -38,7 +40,7 @@ private:
 	Character* target;
 	AvailableBehaviours* startBehaviour;
 
-	int position;
+	Vector* position;
 	std::string icon;
 };
 

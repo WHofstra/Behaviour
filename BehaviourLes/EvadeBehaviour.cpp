@@ -8,17 +8,17 @@ EvadeBehaviour::~EvadeBehaviour()
 {
 }
 
-int EvadeBehaviour::Update(int ownPosition, int targetPosition, int minPosition, int maxPosition)
+Vector EvadeBehaviour::Update(Vector* ownPosition, Vector* targetPosition, Vector* minPosition, Vector* maxPosition)
 {
-	if (abs(ownPosition - targetPosition) < 5) {
-		if (ownPosition < targetPosition && ownPosition > minPosition) {
-			return ownPosition -1;
+	if (abs(ownPosition->X() - targetPosition->X()) < 5) {
+		if (ownPosition->X() < targetPosition->X() && ownPosition->X() > minPosition->X()) {
+			ownPosition->SetVector(ownPosition->X() - 1, ownPosition->Y());
 		}
-		else if (ownPosition > targetPosition&& ownPosition < maxPosition) {
-			return ownPosition +1;
+		else if (ownPosition->X() > targetPosition->X() && ownPosition->X() < maxPosition->X()) {
+			ownPosition->SetVector(ownPosition->X() + 1, ownPosition->Y());
 		}
 	}
-	return ownPosition;
+	return *ownPosition;
 }
 
 	

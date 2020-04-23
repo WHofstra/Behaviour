@@ -1,7 +1,7 @@
 #include "Character.h"
 
-Character::Character(AvailableBehaviours aStartBehaviour, int aStartPosition, std::string anIcon, Character* aTarget)
-	:position(aStartPosition), icon(anIcon), startBehaviour(&aStartBehaviour), currentBehaviour(new Behaviour()), target(aTarget)
+Character::Character(AvailableBehaviours aStartBehaviour, Vector aStartPosition, std::string anIcon, Character* aTarget)
+	:position(&aStartPosition), icon(anIcon), startBehaviour(&aStartBehaviour), currentBehaviour(new Behaviour()), target(aTarget)
 {
 	if (aTarget) {
 		switch (aStartBehaviour)
@@ -57,23 +57,22 @@ void Character::Setbehaviour(AvailableBehaviours aBehaviour)
 		break;
 	}
 }
-
-int Character::Update(int min, int max)
+Vector Character::Update(Vector* min, Vector* max)
 {
 	if (target && currentBehaviour) {
-		position = currentBehaviour->Update(position, target->GetPosition(), min, max);
+		position = &currentBehaviour->Update(position, &(target->GetPosition()), min, max);
 	}
-	return position;
+	return *position;
 }
 
-void Character::SetPosition(int aPos)
+void Character::SetPosition(Vector aPos)
 {
-	position = aPos;
+	position = &aPos;
 }
 
-int Character::GetPosition()
+Vector Character::GetPosition()
 {
-	return position;
+	return *position;
 }
 
 void Character::SetIcon(std::string* newIcon)

@@ -7,6 +7,7 @@ class EvadeBehaviour :
 public:
 	EvadeBehaviour();
 	~EvadeBehaviour();
-	int Update(int ownPosition, int targetPosition, int minPosition = 0, int maxPosition = 100);
+	Vector Update(Vector* ownPosition, Vector* targetPosition,
+		Vector* minPosition = &Vector(0, 0), Vector* maxPosition = &Vector(100, 0));
 };
 

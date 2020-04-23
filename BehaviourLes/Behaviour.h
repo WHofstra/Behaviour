@@ -1,5 +1,7 @@
 #pragma once
 #include <cmath>
+#include "Vector.h"
+
 class Character;
 
 class Behaviour
@@ -7,6 +9,7 @@ class Behaviour
 public:
 	Behaviour();
 	~Behaviour();
-	virtual int Update(int ownPosition, int targetPosition, int minPosition = 0, int maxPosition = 100);
+	virtual Vector Update(Vector* ownPosition, Vector* targetPosition,
+		Vector* minPosition = &Vector(0, 0), Vector* maxPosition = &Vector(100, 0));
 };
 

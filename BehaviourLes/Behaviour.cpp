@@ -10,7 +10,7 @@ Behaviour::~Behaviour()
 {
 }
 
-int Behaviour::Update(int ownPosition, int targetPosition, int minPosition, int maxPosition)
+Vector Behaviour::Update(Vector* ownPosition, Vector* targetPosition, Vector* minPosition, Vector* maxPosition)
 {
-	return 0;
+	return Vector(0, 0);
 }

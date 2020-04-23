@@ -5,8 +5,8 @@
 #include <time.h>
 #include <vector>
 
+#include "Vector.h"
 #include "Character.h"
-#include "Behaviour.h"
 #include "ChaseBehaviour.h"
 #include "EvadeBehaviour.h"
 
@@ -21,8 +21,7 @@ int turns = 3;
 std::vector<Character*>* PlaceCharacters(std::vector<std::string>* field, std::vector<Character*>* vector,
 	                                     Character* character, std::vector<std::string>* iconList)
 {
-	character->SetPosition(rand() % (field->size()));
-	character->SetIcon(&(iconList->at(rand() % 2)));
+	character->SetPosition(Vector(rand() % (field->size()), 0));
 	vector->push_back(character);
 	vector->at(0)->SetTarget(vector->at(1));
 	return vector;
@@ -50,24 +49,10 @@ int CheckTurn(int amount, HANDLE* thisHandle)
 	return amount;
 }
 
-Character* SetIcon(Character* current, Character* target, std::vector<std::string>* iconList)
-{
-	if (current->GetPosition() > target->GetPosition()) {
-		current->SetIcon(&(iconList->at(3)));
-	}
-	else {
-		current->SetIcon(&(iconList->at(2)));
-	}
-
-	return current;
-}
-
 void SetTextColor(std::string* string, HANDLE* thisHandle, std::vector<std::string>* iconList)
 {
 	if (*string == iconList->at(0) ||
-		*string == iconList->at(1) ||
-		*string == iconList->at(2) ||
-		*string == iconList->at(3)) {
+		*string == iconList->at(1)) {
 		SetConsoleTextAttribute(*thisHandle, 13);
 	}
 	else {
@@ -80,21 +65,25 @@ int main()
 	HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
 
 	std::vector<std::string> icons =
-	{ "( ; )", "( * )", "8====D", "C====8" };
+	{ "E", "C" };
 
 	//Characters aanmaken
-	Character player(Character::AvailableBehaviours::IDLE, 20, icons.at(rand() % 2));
-	Character enemy(Character::AvailableBehaviours::CHASE, 40, icons.at(2), &player);
+	Character player(Character::AvailableBehaviours::IDLE, Vector(20, 0), icons.at(0));
+	Character enemy(Character::AvailableBehaviours::CHASE, Vector(40, 0), icons.at(1), &player);
 
 	//Game mechanics activeren
 	player.SetTarget(&enemy);
 	player.Setbehaviour(Character::AvailableBehaviours::EVADE);
+
+	//Zet minimale en maximale waarden
+	std::vector<Vector> fieldValues = { Vector(0, 0), Vector(maxWidth, 0) };
 
 	//alle spelers in een lijst
 	std::vector<Character*> characters{ &enemy, &player };
 
 	//een scene van 100 breed aanmaken
 	scene.resize(50);
+	std::vector<Vector> sceneSize = { fieldValues.at(0), Vector((int)scene.size() - 1, 0) };
 
 	//deze scene vullen met _
 	
@@ -109,10 +98,7 @@ int main()
 			//std::cout << "[" << clock() << "] updating" << std::endl;
 
 			for (Character* aCharacter : characters){
-				if (aCharacter == &enemy) {
-					aCharacter = SetIcon(aCharacter, aCharacter->GetTarget(), &icons);
-				}
-				scene.at(aCharacter->Update(0, (int)(scene.size() - 1))) = aCharacter->GetIcon();
+				//Draw Character Icons
 			}
 
 			std::cout << std::endl;
@@ -120,16 +106,18 @@ int main()
 				SetTextColor(&s, &handle, &icons);
 				std::cout << s;
 			}
-			SetConsoleTextAttribute(handle, 12);
-			std::cout << "\nYou want to commit crimes?!\nWell, this is JAIL, MOTHERFUCKER!";
+			//SetConsoleTextAttribute(handle, 12);
+			//std::cout << "\nYou want to commit crimes?!\nWell, this is JAIL, MOTHERFUCKER!";
 
 			previousFrameTime = clock();
 		}
 
-		if (characters.at(0)->GetPosition() == characters.at(1)->GetPosition())
+		if (characters.at(0)->GetPosition().X() == characters.at(1)->GetPosition().X())
 		{
 			characters = *RemoveCharacters(&characters, 1, 2);
 			characters = *PlaceCharacters(&scene, &characters, &player, &icons);
+			sceneSize.pop_back();
+			sceneSize.push_back(Vector((int)scene.size() - 1, 0));
 			turns = CheckTurn(turns, &handle);
 		}
 		SetConsoleTextAttribute(handle, 2);
